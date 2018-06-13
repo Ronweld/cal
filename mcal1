@@ -1,0 +1,150 @@
+#!/bin/bash
+
+#Constantes de exit.
+E_NOOP=21
+E_NOYEAR=22
+E_NOMES=23
+E_MASDOS=24
+
+#El SCRIPT.
+MI_SCRIPT=`basename $0`
+
+#Variables de apoyo.
+mes=0
+anno=0
+
+#Algunas funciones de ayuda.
+ayuda() {
+	echo ""
+	echo "El uso es $MI_SCRIPT -h|-help para ver esta pantalla."
+	echo ""
+	echo "O bien $MI_SCRIPT [mes] [año]."
+	echo ""
+	echo "Donde [mes] es un número (del 1 al 12),"
+	echo "o bien su nombre en castellano o en inglés,"
+	echo "o bien su abreviatura (3 caracteres) en castellano o en inglés."
+	echo ""
+	echo "Y donde año es un número entre 1 y 9999."
+	echo ""
+}
+
+fecha() {
+	set `date +"%m %Y"`
+	mes=$1
+	anno=$2
+}
+
+case $# in	#case según el número de argumentos.
+0)	fecha;;	#caso sin argumentos.
+1)	case ${1,,} in	#caso con 1 argumento.
+	-h|-help)
+		ayuda;
+		exit 0;;
+	1|jan|ene|enero|january)	#Compruebo si es un mes.
+		fecha;
+		mes=1;;
+	2|feb|febrero|february)
+		fecha;
+		mes=2;;
+	3|mar|marzo|march)
+		fecha;
+		mes=3;;
+	4|apr|abr|abril|april)
+		fecha;
+		mes=4;;
+	5|may|mayo|may)
+		fecha;
+		mes=5;;
+	6|jun|junio|june)
+		fecha;
+		mes=6;;
+	7|jul|julio|july)
+		fecha;
+		mes=7;;
+	8|ago|aug|agosto|august)
+		fecha;
+		mes=8;;
+	9|sep|septiembre|september)
+		fecha;
+		mes=9;;
+	10|oct|octubre|october)
+		fecha;
+		mes=10;;
+	11|nov|noviembre|november)
+		fecha;
+		mes=11;;
+	12|dic|dec|diciembre|december)
+		fecha;
+		mes=12;;
+	*[^0-9]*)	#No es un número.
+		echo "" >&2;
+		echo "Opción desconocida." >&2;
+		ayuda >&2;
+		exit $E_NOOP;;
+	*)	if [ 13 -le $1 ] && [ $1 -le 9999 ]
+		then
+			mes="";
+			anno=$1;
+		else
+			echo "" >&2;
+			echo "Año o mes incorrecto." >&2;
+			ayuda >&2;
+			exit $E_NOOP;
+		fi;;
+	esac;;	#Fin con 1 argumento.
+2)	case ${1,,} in	#caso con 2 argumentos.
+	1|jan|ene|enero|january)	#Compruebo si $1 es un mes.
+		mes=1;;
+	2|feb|febrero|february)
+		mes=2;;
+	3|mar|marzo|march)
+		mes=3;;
+	4|apr|abr|abril|april)
+		mes=4;;
+	5|may|mayo|may)
+		mes=5;;
+	6|jun|junio|june)
+		mes=6;;
+	7|jul|julio|july)
+		mes=7;;
+	8|ago|aug|agosto|august)
+		mes=8;;
+	9|sep|septiembre|september)
+		mes=9;;
+	10|oct|octubre|october)
+		mes=10;;
+	11|nov|noviembre|november)
+		mes=11;;
+	12|dic|dec|diciembre|december)
+		mes=12;;
+	*)	echo "" >&2;	#$1 no es un mes.
+		echo "Mes incorrecto." >&2;
+		ayuda >&2;
+		exit $E_NOMES;;
+	esac;	#Fin caso de $1.
+	case ${2} in	#Compruebo que $2 sea un año.
+	*[^0-9]*)	#$2 no es número.
+		echo "" >&2;
+		echo "Año incorrecto." >&2;
+		ayuda >&2;
+		exit $E_NOYEAR;;
+	*)	if [ 1 -le $2 ] && [ $2 -le 9999 ]
+		then
+			anno=$2;
+		else
+		        echo "" >&2;
+               		echo "Año incorrecto." >&2;
+	                ayuda >&2;
+			exit $E_NOYEAR;
+		fi;;
+	esac;;	#Fin del caso de $2 y fin con 2 argumentos.
+*)	echo "" >&2;	#tres o más parámetros.
+	echo "Demasiados argumentos." >&2;
+	ayuda >&2;
+	exit $E_MASDOS;;
+esac	#Fin de todos los cases.
+
+cal $mes $anno
+
+exit $?	#Devuelve el resultado del último comando.
+

@@ -1,0 +1,47 @@
+#!/bin/bash
+# Leopoldo De Leon Robredo
+
+fecha=$(date)
+anno=$(date +"%-Y")
+mes=$(date +"%-m")
+
+if [ $#  == 0 ] ; then # Si no existen parametros $#= = 0
+	cal $mes $anno
+else 
+	if [ $#  == 1 ] ; then # existe un parametro
+
+		if [ $1 == 'help'  ] ; then ## help 
+			echo "Help mcal: ingrese uno o dos parametos (o ningun paramtero) ... lorem ipsum factum  "
+			exit 0
+		else
+			if [ $1 -gt 0 ] ; then  ## si solo es un parametro valida que este entre 1 y 12 y muestra el calendario del mes ingresado y año actual
+				if [ $1 -lt  13 ] ; then # el parametro es mes 
+					cal $1 $anno
+				else # el parametro es el año y se muestra el calendario del año ingresado
+					cal $1
+				fi
+			fi
+		fi
+	else # son 2 o mas parametros pero consideramos los primeros 2 parametros
+		if [ $1 -gt 0 ] ; then ## se valida que el primer parametro sea mayor a 0 mes
+			if [ $2 -gt 0  ] ; then ## se valida que segundo parametro sea mayor a 0 año
+				if [ $1 -lt 13  ] ; then
+					cal $1 $2
+				else
+					echo "Error: el primer parametro no es un numero valido "
+				fi
+			else
+				echo "Error: el segundo parametro no es un numero valido"
+			fi
+
+		else
+			echo "Error: el primer parametro no es un numero valido "
+		fi
+
+	fi
+fi
+
+
+
+
+

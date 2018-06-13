@@ -1,0 +1,100 @@
+#!/bin/bash
+
+#Introducimos el PATH actual a la variable $PATH
+basename `pwd`
+PATH=$PATH:`pwd`; export PATH
+# Variables para establecer mes y año actual
+MES=$( date "+%m" )
+ANIO=$( date "+%Y" )
+# Funcion ayuda
+ayuda ()
+{
+   echo "uso: ./mcal [mes] [año]"
+   echo "./mcal [1-12] : Muestra calendario del mes solicitado del año en curso"
+   echo "./mcal [ene-dic] : Muestra calendario del mes solicitado del año en curso. También en ingles"
+   echo "./mcal [enero-diciembre] : Idem al anterior"
+   echo "./mcal [>12] (superior a 12) : Muestra el calendario del año solicitado"
+   echo "./mcal [mes] [año] : Muestra el calendario del mes y año solicitado"
+   echo "./mcal [-help] : Muestra la ayuda"
+   echo "[mes] Se puede especificar en números, letras o abrebiación (3 letras) en español e inglés"
+   echo
+   echo "ejemplos:"
+   echo "./mcal enero : Muestra el calendario de enero del año en curso"
+   echo "./mcal 3 :  Muestra calendario de marzo del año en curso"
+   echo "./mcal apr 2015 : Muestra calendario de abril de 2.015" 
+   echo "./mcal 2000 : Muestra calendario del año 2.000"
+   echo
+   echo "./mcal 2015 > archivo_cal : Escribe calendario de 2015 a archivo_cal"
+   echo "./mcal -help > archivo_ayuda : Escribe ayuda a: archivo_ayuda" 
+
+}
+# Funcion para los meses en letras español-ingles y abrebiaciones
+entrada=$1
+mesletras ()
+{
+case $entrada in
+# Si el el primer argumento es 0: Muestra error y muestra la ayuda
+0) echo "El mes debe ser entre 1 y 12. El año debe ser entre 13 y 9999 (con un solo argumento)" >&2; ayuda; exit 1;;
+# Comprueba los meses y sus abrebiaciones, así como los numeros del 1 al 12. Le da el valor de $entrada a la variable $resultado
+enero|ene|january|jan|1 ) resultado=1;; 
+feb|febrero|february|2 ) resultado=2;;
+mar|marzo|march|3 ) resultado=3;;
+abr|abril|apr|april|4 ) resultado=4;;
+mayo|may|5 ) resultado=5;;
+junio|jun|june|6 ) resultado=6;;
+jul|julio|july|7 ) resultado=7;;
+ago|agosto|august|aug|8 ) resultado=8;;
+sep|septiembre|setiembre|september|9 ) resultado=9;;
+oct|octubre|october|10 ) resultado=10;;
+nov|noviembre|november|11 ) resultado=11;;
+dic|diciembre|december|dec|12 ) resultado=12;;
+# Si el numero del primer atributo es mayor a 12, muestra el año del número introducido
+*) cal $entrada; exit 0;;
+esac
+}
+# Condiciones y atributos principales
+case $# in
+0) # No hay ningun argumento, muestra mes y año actual.
+   cal $MES $ANIO
+   ;;
+1) # Un solo argumento
+   # Si el argumento es: -help: Muestra la ayuda
+   if [[ "$1" = "-help" ]]
+   then
+   ayuda 
+   # llama a la funcion mesletras () para el argumento
+   elif [[ "$1" = "$entrada" ]]
+   then
+   mesletras
+   cal $resultado $ANIO
+   fi
+   ;;
+2) # Dos argumentos
+   # Llama a la funcion mesletras () para el primer argumento
+   if [[ "$1" = "$entrada" ]]
+   then
+   mesletras
+   cal $resultado $2; exit 0;
+# Si el primer parametro es 0, muestra error y presenta la ayuda
+   elif [ $1 -eq 0 ]
+   then
+   echo "El mes debe ser entre 1 y 12. El año debe ser entre 1 y 9999" >&2; exit 0;
+   ayuda
+   # Si el  argumento es un numero entre 1 y 12 : Muestra el calendario del numero de mes del año del segundo argumento
+   elif [ $1 -le 12 ]
+   then
+   cal $1 $2; exit 0;
+   else
+   #Si el primer parámetro no es entre 1 y 12 y tampoco 0: Muestra error y ayuda
+   echo "El mes debe ser entre 1 y 12. El año debe ser entre 13 y 9999 (con un solo argumento)" >&2;
+   ayuda
+   fi
+   ;;
+*) # Tres o mas argumentos
+   # Muestra texto de error
+   echo "demasiados argumentos, escriba ./cal -help para obtener ayuda" >&2;;
+
+esac
+
+
+
