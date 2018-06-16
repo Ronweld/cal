@@ -1,0 +1,17 @@
+Alejandro Gallardo
+git
+apt-get install git
+sudo apt-get install git
+git config --global user.name "AlexGallardoM"
+git config --global user.email "alex.gallardo.martin@gmail.com"
+find /.gitconfig
+find ~/.gitconfig
+cd ~/.ssh
+pwd
+sh-keygen -t rsa -C alex.gallardo.martin@gmail.com
+ssh-keygen -t rsa -C alex.gallardo.martin@gmail.com
+ssh -T git@github.com
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDDBHX4cCnAEYOB02HB7XJlzWJdJuc4QnzZIqjWqlZgJuiaQZQJlABwMHQEO1802KKpEFP7Ng1HIAmLr2cQ/FKPf/QEdq/tivxmdRXIzTNUFu1q62IzOlimNwdJ3mvwADcbDKnfYRQmu27lLga5UzxEoxkjF76ugI99xVqSIttwX9zyirNq2hSj+kOcWQoy/kkzRcv4ALNQ/6CSCzmDfV4SOqygh7Gys4SNTezARdv/QpO1nWNiVJR4a/uzQ2XBOZFJQ5prMFC/QvwYQlndfsWLhiUJT7J26GBZbkYWj4QG9ZBKcXgg/zDgzTauGf56oUoXrT9Sm4RnKEjf5INOdj+X alex.gallardo.martin@gmail.com
+Hi AlexGallardoM! You've successfully authenticated, but GitHub does not provide shell access.
+
+history -w AlexGallardoM.txt
